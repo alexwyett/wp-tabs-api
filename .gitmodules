@@ -1,0 +1,6 @@
+[submodule "libraries/tabs-api-client"]
+	path = libraries/tabs-api-client
+	url = git@github.com:CarltonSoftware/tabs-api-client.git
+[submodule "libraries/aw-form-fields"]
+	path = libraries/aw-form-fields
+	url = git@github.com:alexwyett/aw-form-fields.git
