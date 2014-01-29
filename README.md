@@ -1,4 +1,6 @@
-wp-tabs-api
+Wordpress Tabs API plugin
 ===========
 
-Wordpress Tabs API Plugin
+This plugin uses the tabs api client to give a wordpress site access to the tabs api.
+
+Note: This is purely for demonstration purposes
