@@ -1,0 +1,63 @@
+.cottage-summary .main-image {
+    float: left;
+    width: 25%;
+}
+.cottage-summary .summary {
+    float: left;
+    width: 75%;
+}
+
+table.wp-tabs-api-calendar { 
+    border-collapse: separate; 
+    float: left; 
+    margin-right: 10px; 
+    margin-top: 10px; 
+}
+
+table.wp-tabs-api-calendar td, 
+table.wp-tabs-api-calendar th { 
+    height: 28px; 
+    text-align: center; 
+    vertical-align: middle; 
+    font-size: 11px; 
+}
+
+table.wp-tabs-api-calendar th { 
+    background: #57666B !important; 
+    border: 1px solid #FFFFFF; 
+    color: #FFFFFF; 
+}
+
+table.wp-tabs-api-calendar td { 
+    background: #EBEBEB; 
+    border: 1px solid #FFFFFF; 
+    width: 28px; 
+}
+
+table.wp-tabs-api-calendar td.unavailable { 
+    background: #BBC2C5 !important; 
+}
+
+table.wp-tabs-api-calendar td.available { 
+    background: #416B83; 
+    color: #FFFFFF; 
+    cursor: pointer; 
+}
+
+table.wp-tabs-api-calendar td.available.changeover { 
+    background: #4F8FCC; 
+}
+
+table.wp-tabs-api-calendar td.selected { 
+    background: #BB6E7A !important; 
+}
+
+.availability-form { padding: 2%; width: 96%; background: #EEE; }
+.availability-form fieldset { float: left; width: 33%; }
+.availability-form fieldset .row { padding: 5px 0; }
+.availability-form fieldset .row label { float: left; line-height: 24px; }
+.availability-form fieldset .row select { float: right; margin-right: 30px; width: 100px; }
+.availability-form .booking-summary { background: #FFF; padding: 10px; height: 100px; line-height: 24px; }
+.availability-form .booking-summary.ok { font-size: 40px; line-height: 100px; }
+.availability-form .submit { width: 100%; margin-top: 10px; }
+.availability-form .bookingExtras { margin-left: 30px; background: #FFF; padding: 20px; line-height: 20px; height: 120px; }
