@@ -745,7 +745,7 @@ class WpTabsApi
             )
         );
         
-        $brochureForm = new \AW\Forms\BrochureRequest(
+        $brochureForm = \aw\formfields\forms\BrochureForm::factory(
             array(
                 'method' => 'post'
             ), 
