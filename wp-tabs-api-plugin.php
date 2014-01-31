@@ -99,7 +99,12 @@ require 'helpers/common.php';
 /**
  * Include formFields bootstrap loader
  */
-require_once 'libraries/aw-form-fields/aw/autoload.php';
+require_once 'libraries/aw-form-fields/aw/formfields/autoload.php';
+
+/**
+ * Include the tabs api 
+ */
+require_once 'libraries/tabs-api-client/tabs/autoload.php';
 
 /**
  * Require Tabs Api Class 
