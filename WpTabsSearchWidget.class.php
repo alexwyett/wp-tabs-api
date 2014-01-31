@@ -145,181 +145,161 @@ class WpTabsSearchWidget extends WP_Widget
         if (!stristr('http:', $uri)) {
             $uri = get_permalink(trim($uri));
         }
-        
-        $form = new \AW\Forms\Form(
+        $form = \aw\formfields\forms\SearchForm::factory(
             array(
                 'method' => 'post', 
                 'action' => admin_url('admin-ajax.php')
             ),
-            $search->getInitialParams()
+            $search->getInitialParams(),
+            $search->getSearchPrefix()
         );
         
-        // Set form template
-        $form->setTemplate('<form{implodeAttributes}>{renderFieldSets}</form>');
-        
-        $fieldSet = new \AW\Forms\FormFields\Fieldset();
-        $fieldSet->setLegend('Search for Cottages');
-        
         // Set uri hidden field
-        $fieldSet->setField(
-            new \AW\Forms\FormFields\HiddenField(
+        $form->addChild(
+            new \aw\formfields\fields\HiddenInput(
                 'redirectUrl', 
                 array('value' => $uri)
             )
         );
         
         // Set uri hidden field
-        $fieldSet->setField(
-            new \AW\Forms\FormFields\HiddenField(
+        $form->addChild(
+            new \aw\formfields\fields\HiddenInput(
                 'action', 
                 array('value' => 'cottagesearch')
             )
         );
         
-        // Create new textfield for cottage name search
-        $field = new \AW\Forms\FormFields\TextField(
-            $search->getSearchPrefix() . 'name'
-        );
-        $field->setWrapper(new \AW\Forms\FormFields\Wrapper());
-        $field->createLabel('Name');
-        $fieldSet->setField($field);
-        
         // Create new area select box
-        $field = new \AW\Forms\FormFields\SelectField(
-            $search->getSearchPrefix() . 'area',
-            array_merge(
-                array('Any Area' => ''),
-                $this->getTabsApi()->getAreasInverse()
-            )
+        $form->getElementBy('getType', 'fieldset')->addChild(
+            \aw\formfields\forms\ContactForm::getNewLabelAndSelect(
+                'Area',
+                array_merge(
+                    array('Any Area' => ''),
+                    $this->getTabsApi()->getAreasInverse()
+                )
+            )->getElementBy('getType', 'select')
+                ->setName($search->getSearchPrefix() . 'area')
+                ->getParent()
         );
-        $field->setWrapper(new \AW\Forms\FormFields\Wrapper());
-        $field->createLabel('Area');
-        $fieldSet->setField($field);
         
-        // Create new location select box
-        $field = new \AW\Forms\FormFields\SelectField(
-            $search->getSearchPrefix() . 'location',
-            array_merge(
-                array('Any Location' => ''),
-                $this->getTabsApi()->getLocationsArray()
-            )
+        // Create new area location box
+        $form->getElementBy('getType', 'fieldset')->addChild(
+            \aw\formfields\forms\ContactForm::getNewLabelAndSelect(
+                'Location',
+                array_merge(
+                    array('Any Location' => ''),
+                    $this->getTabsApi()->getLocationsArray()
+                )
+            )->getElementBy('getType', 'select')
+                ->setName($search->getSearchPrefix() . 'location')
+                ->getParent()
         );
-        $field->setWrapper(new \AW\Forms\FormFields\Wrapper());
-        $field->createLabel('Location');
-        $fieldSet->setField($field);
         
-        // Create new textfield for arrival date
-        $field = new \AW\Forms\FormFields\TextField(
-            $search->getSearchPrefix() . 'fromDate',
-            array('class' => 'dtp')
+        // Create new area location box
+        $form->getElementBy('getType', 'fieldset')->addChild(
+            \aw\formfields\forms\ContactForm::getNewLabelAndTextField(
+                'From Date'
+            )->getElementBy('getType', 'text')
+                ->setName($search->getSearchPrefix() . 'fromDate')
+                ->addClass('dtp')
+                ->getParent()
         );
-        $field->setWrapper(new \AW\Forms\FormFields\Wrapper());
-        $field->createLabel('From');
-        $fieldSet->setField($field);
         
         // Create new nights select box
-        $field = new \AW\Forms\FormFields\SelectField(
-            $search->getSearchPrefix() . 'nights',
-            array(
-                'Any' => '',
-                '2 nights' => 2,
-                '3 nights' => 3,
-                '4 nights' => 4,
-                '5 nights' => 5,
-                '6 nights' => 6,
-                '7 nights' => 7,
-                '8 nights' => 8,
-                '9 nights' => 9,
-                '10 nights' => 10,
-                '11 nights' => 11,
-                '12 nights' => 12,
-                '13 nights' => 13,
-                '14 nights' => 14,
-                '14 nights' => 14,
-                '15 nights' => 15,
-                '16 nights' => 16,
-                '17 nights' => 17,
-                '18 nights' => 18,
-                '19 nights' => 19,
-                '20 nights' => 20,
-                '21 nights' => 21,
-                '22 nights' => 22,
-                '23 nights' => 23,
-                '24 nights' => 24,
-                '25 nights' => 25,
-                '26 nights' => 26,
-                '27 nights' => 27,
-                '28 nights' => 28
+        $form->getElementBy('getType', 'fieldset')->addChild(
+            \aw\formfields\forms\ContactForm::getNewLabelAndSelect(
+                'Nights',
+                array(
+                    'Any' => '',
+                    '2 nights' => 2,
+                    '3 nights' => 3,
+                    '4 nights' => 4,
+                    '5 nights' => 5,
+                    '6 nights' => 6,
+                    '7 nights' => 7,
+                    '8 nights' => 8,
+                    '9 nights' => 9,
+                    '10 nights' => 10,
+                    '11 nights' => 11,
+                    '12 nights' => 12,
+                    '13 nights' => 13,
+                    '14 nights' => 14,
+                    '14 nights' => 14,
+                    '15 nights' => 15,
+                    '16 nights' => 16,
+                    '17 nights' => 17,
+                    '18 nights' => 18,
+                    '19 nights' => 19,
+                    '20 nights' => 20,
+                    '21 nights' => 21,
+                    '22 nights' => 22,
+                    '23 nights' => 23,
+                    '24 nights' => 24,
+                    '25 nights' => 25,
+                    '26 nights' => 26,
+                    '27 nights' => 27,
+                    '28 nights'
+                )
+            )->getElementBy('getType', 'select')
+                ->setName($search->getSearchPrefix() . 'nights')
+                ->getParent()
+        );
+        
+        // Create new sleeps select box
+        $form->getElementBy('getType', 'fieldset')->addChild(
+            \aw\formfields\forms\ContactForm::getNewLabelAndSelect(
+                'Sleeping',
+                array(
+                    'Any' => '',
+                    2  => 2,
+                    3  => 3,
+                    4  => 4,
+                    5  => 5,
+                    6  => 6,
+                    7  => 7,
+                    8  => 8,
+                    9  => 9,
+                    "10+" => ">10"
+                )
+            )->getElementBy('getType', 'select')
+                ->setName($search->getSearchPrefix() . 'accommodates')
+                ->getParent()
+        );
+        
+        // Create new sleeps select box
+        $petLbl = new \aw\formfields\fields\Label('Taking a Pet?');
+        $form->getElementBy('getType', 'fieldset')->addChild(
+            $petLbl->addChild(
+                new \aw\formfields\fields\Checkbox(
+                    $search->getSearchPrefix() . 'pets',
+                    array(
+                        'id' => $search->getSearchPrefix() . 'pets',
+                        'value' => 'true'
+                    )
+                )
             )
         );
-        $field->setWrapper(new \AW\Forms\FormFields\Wrapper());
-        $field->createLabel('Nights');
-        $fieldSet->setField($field);
         
-        // Create new accommodates select box
-        $field = new \AW\Forms\FormFields\SelectField(
-            $search->getSearchPrefix() . 'accommodates',
-            array(
-                'Any' => '',
-                2  => 2,
-                3  => 3,
-                4  => 4,
-                5  => 5,
-                6  => 6,
-                7  => 7,
-                8  => 8,
-                9  => 9,
-                "10+" => ">10"
-            )
+        // Create new sleeps select box
+        $form->getElementBy('getType', 'fieldset')->addChild(
+            \aw\formfields\forms\ContactForm::getNewLabelAndSelect(
+                'Order',
+                array(
+                    'Any' => '',
+                    'Price low to high' => 'price_asc',
+                    'Price high to low' => 'price_desc',
+                    'Sleeps low to high' => 'accom_asc',
+                    'Sleeps high to low' => 'accom_desc',
+                    'Bedrooms low to high' => 'bedrooms_asc',
+                    'Bedrooms high to low' => 'bedrooms_desc',
+                )
+            )->getElementBy('getType', 'select')
+                ->setName($search->getSearchPrefix() . 'orderBy')
+                ->getParent()
         );
-        $field->setWrapper(new \AW\Forms\FormFields\Wrapper());
-        $field->createLabel('Sleeping');
-        $fieldSet->setField($field);
         
-        // Create new pets checkbox box
-        $field = new \AW\Forms\FormFields\CheckBoxField(
-            $search->getSearchPrefix() . 'pets',
-            array_key_exists(
-                $search->getSearchPrefix() . 'pets',
-                $form->getFormValues()
-            ),
-            array(
-                'id' => $search->getSearchPrefix() . 'pets',
-                'value' => 'true'
-            )
-        );
-        $field->setWrapper(new \AW\Forms\FormFields\Wrapper());
-        $field->createLabel('Pets?');
-        $fieldSet->setField($field);
-        
-        // Create new order by field
-        $field = new \AW\Forms\FormFields\SelectField(
-            $search->getSearchPrefix() . 'orderBy',
-            array(
-                'Any' => '',
-                'Price low to high' => 'price_asc',
-                'Price high to low' => 'price_desc',
-                'Sleeps low to high' => 'accom_asc',
-                'Sleeps high to low' => 'accom_desc',
-                'Bedrooms low to high' => 'bedrooms_asc',
-                'Bedrooms high to low' => 'bedrooms_desc',
-            )
-        );
-        $field->setWrapper(new \AW\Forms\FormFields\Wrapper());
-        $field->createLabel('Order');
-        $fieldSet->setField($field);
-        
-        // Add fieldset to form
-        $form->setFieldset($fieldSet);
-        
-        // Add new Submit button and field
-        $fieldSet = new \AW\Forms\FormFields\Fieldset(array('class' => 'actions'));
-        $fieldSet->setTemplate('<div{implodeAttributes}>{renderFields}</div>');
-        $submit = new \AW\Forms\FormFields\SubmitField(array('value' => 'Search'));
-        $fieldSet->setField($submit);
-        $form->setFieldset($fieldSet);
-        
-        echo $form;
+        echo $form->mapValues();
     }
     
     /**
