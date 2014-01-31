@@ -318,12 +318,15 @@ class WpTabsApi
 
     /**
      * From http://codex.wordpress.org/Template_Hierarchy
+     * 
+     * This function is for determining which template to use when a
+     * custom end point is found.
      *
      * Adds a custom template to the query queue.
      * 
      * @return void
      */
-    function addTemplateRedirect()
+    public function addTemplateRedirect()
     {
         if (stristr($_SERVER['REDIRECT_URL'], 'imagecache')) {
             extract($this->_getImageCacheUrlVars($_SERVER['REDIRECT_URL']));
@@ -336,6 +339,7 @@ class WpTabsApi
             );
         }
         
+        // If this isnt a single cottage post, return.
         if (!is_singular()) {
             return;
         }
@@ -357,6 +361,7 @@ class WpTabsApi
             }
         }
         
+        // No endpoint found, return.
         if (!$endPointFound) {
             return;
         }
@@ -421,6 +426,9 @@ class WpTabsApi
     public function includeTemplate($template_path, $recurse = true)
     {
         global $post;
+        
+        // Check what type of page it is, single cottage, do this, else do the
+        // next bit
         if (get_post_type() == $this->getCottagePostType()
             && is_single()
         ) {
