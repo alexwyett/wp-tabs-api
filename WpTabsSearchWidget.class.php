@@ -299,6 +299,21 @@ class WpTabsSearchWidget extends WP_Widget
                 ->getParent()
         );
         
+        // Simple styling
+        // Apply a different template to each of the labels
+        $form->each('getType', 'label', function($label) {
+            $label->setTemplate(
+                '<div class="row">'
+                    . '<div class="col">'
+                    . ' <label{implodeAttributes}>{getLabel}</label>'
+                    . '</div>'
+                    . '<div class="col">'
+                    . '{renderChildren}'
+                    . '</div>'
+                . '</div>'
+            );
+        });
+        
         echo $form->mapValues();
     }
     
