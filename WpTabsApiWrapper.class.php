@@ -14,11 +14,6 @@
  */
 
 /**
- * Include the tabs api 
- */
-require_once 'libraries/tabs-api-client/tabs/autoload.php';
-
-/**
  * WP Tabs Api Wrapper Class.  Conditionally includes tabs api client files
  * and returns the correct objects. 
  *
