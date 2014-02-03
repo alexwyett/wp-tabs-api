@@ -767,6 +767,9 @@ class WpTabsApi
                 $this->getTabsApi()->getSourceCodesInverse()
             )
         );
+            
+        // Register hook for the cottage preprocessing
+        do_action('wpTabsApiBrochurePreprocess', $brochureForm);
         
         if (count($_POST) > 0) {
             $brochureForm->validate();
@@ -832,6 +835,9 @@ class WpTabsApi
                 $this->getTabsApi()->getSourceCodesInverse()
             )
         );
+            
+        // Register hook for the cottage preprocessing
+        do_action('wpTabsApiOwnerpackPreprocess', $ownerForm);
         
         if (count($_POST) > 0) {
             $ownerForm->validate();

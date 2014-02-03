@@ -86,6 +86,20 @@
  * 
  *      function yourAjaxSearchFunction($search) {}
  * 
+ * 9: add_action('wpTabsApiBrochurePreprocess', 'yourBrochureModifyFunction');
+ * 
+ *  - This action enables the brochure form to be modified prior to it being
+ *    rendered.
+ * 
+ *      function yourBrochureModifyFunction(&$ownerPack) {}
+ * 
+ * 10: add_action('wpTabsApiOwnerpackPreprocess', 'yourOwnerpackModifyFunction');
+ * 
+ *  - This action enables the ownerpack form to be modified prior to it being
+ *    rendered.
+ * 
+ *      function yourOwnerpackModifyFunction(&$ownerPack) {}
+ * 
  */
 
 global $wpdb;
