@@ -821,7 +821,7 @@ class WpTabsApi
             )
         );
         
-        $ownerForm = new \AW\Forms\OwnerPackForm(
+        $ownerForm = \aw\formfields\forms\OwnerpackForm::factory(
             array(
                 'method' => 'post'
             ), 
