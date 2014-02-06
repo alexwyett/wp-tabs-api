@@ -145,13 +145,19 @@ class WpTabsSearchWidget extends WP_Widget
         if (!stristr('http:', $uri)) {
             $uri = get_permalink(trim($uri));
         }
-        $form = \aw\formfields\forms\SearchForm::factory(
+        
+        // New search form
+        $form = new \aw\formfields\forms\Form(
             array(
                 'method' => 'post', 
                 'action' => admin_url('admin-ajax.php')
             ),
-            $search->getInitialParams(),
-            $search->getSearchPrefix()
+            $search->getInitialParams()
+        );
+        
+        // Fieldset
+        $fs = \aw\formfields\fields\Fieldset::factory(
+            'Find a cottage'
         );
         
         // Set uri hidden field
@@ -170,35 +176,9 @@ class WpTabsSearchWidget extends WP_Widget
             )
         );
         
-        // Create new area select box
-        $form->getElementBy('getType', 'fieldset')->addChild(
-            \aw\formfields\forms\ContactForm::getNewLabelAndSelect(
-                'Area',
-                array_merge(
-                    array('Any Area' => ''),
-                    $this->getTabsApi()->getAreasInverse()
-                )
-            )->getElementBy('getType', 'select')
-                ->setName($search->getSearchPrefix() . 'area')
-                ->getParent()
-        );
-        
-        // Create new area location box
-        $form->getElementBy('getType', 'fieldset')->addChild(
-            \aw\formfields\forms\ContactForm::getNewLabelAndSelect(
-                'Location',
-                array_merge(
-                    array('Any Location' => ''),
-                    $this->getTabsApi()->getLocationsArray()
-                )
-            )->getElementBy('getType', 'select')
-                ->setName($search->getSearchPrefix() . 'location')
-                ->getParent()
-        );
-        
-        // Create new area location box
-        $form->getElementBy('getType', 'fieldset')->addChild(
-            \aw\formfields\forms\ContactForm::getNewLabelAndTextField(
+        // Create new fromdate
+        $fs->addChild(
+            \aw\formfields\forms\StaticForm::getNewLabelAndTextField(
                 'From Date'
             )->getElementBy('getType', 'text')
                 ->setName($search->getSearchPrefix() . 'fromDate')
@@ -207,8 +187,8 @@ class WpTabsSearchWidget extends WP_Widget
         );
         
         // Create new nights select box
-        $form->getElementBy('getType', 'fieldset')->addChild(
-            \aw\formfields\forms\ContactForm::getNewLabelAndSelect(
+        $fs->addChild(
+            \aw\formfields\forms\StaticForm::getNewLabelAndSelect(
                 'Nights',
                 array(
                     'Any' => '',
@@ -247,8 +227,8 @@ class WpTabsSearchWidget extends WP_Widget
         );
         
         // Create new sleeps select box
-        $form->getElementBy('getType', 'fieldset')->addChild(
-            \aw\formfields\forms\ContactForm::getNewLabelAndSelect(
+        $fs->addChild(
+            \aw\formfields\forms\StaticForm::getNewLabelAndSelect(
                 'Sleeping',
                 array(
                     'Any' => '',
@@ -267,52 +247,55 @@ class WpTabsSearchWidget extends WP_Widget
                 ->getParent()
         );
         
-        // Create new sleeps select box
-        $petLbl = new \aw\formfields\fields\Label('Taking a Pet?');
-        $form->getElementBy('getType', 'fieldset')->addChild(
-            $petLbl->addChild(
-                new \aw\formfields\fields\Checkbox(
-                    $search->getSearchPrefix() . 'pets',
-                    array(
-                        'id' => $search->getSearchPrefix() . 'pets',
-                        'value' => 'true'
-                    )
-                )
-            )
-        );
-        
-        // Create new sleeps select box
-        $form->getElementBy('getType', 'fieldset')->addChild(
-            \aw\formfields\forms\ContactForm::getNewLabelAndSelect(
-                'Order',
-                array(
-                    'Any' => '',
-                    'Price low to high' => 'price_asc',
-                    'Price high to low' => 'price_desc',
-                    'Sleeps low to high' => 'accom_asc',
-                    'Sleeps high to low' => 'accom_desc',
-                    'Bedrooms low to high' => 'bedrooms_asc',
-                    'Bedrooms high to low' => 'bedrooms_desc',
+        // Create new area select box
+        $fs->addChild(
+            \aw\formfields\forms\StaticForm::getNewLabelAndSelect(
+                'Area',
+                array_merge(
+                    array('Any Area' => ''),
+                    $this->getTabsApi()->getAreasInverse()
                 )
             )->getElementBy('getType', 'select')
-                ->setName($search->getSearchPrefix() . 'orderBy')
+                ->setName($search->getSearchPrefix() . 'area')
                 ->getParent()
         );
         
-        // Simple styling
-        // Apply a different template to each of the labels
-        $form->each('getType', 'label', function($label) {
-            $label->setTemplate(
-                '<div class="row">'
-                    . '<div class="col">'
-                    . ' <label{implodeAttributes}>{getLabel}</label>'
-                    . '</div>'
-                    . '<div class="col">'
-                    . '{renderChildren}'
-                    . '</div>'
-                . '</div>'
-            );
-        });
+        // Create new area location box
+        $fs->addChild(
+            \aw\formfields\forms\StaticForm::getNewLabelAndSelect(
+                'Location',
+                array_merge(
+                    array('Any Location' => ''),
+                    $this->getTabsApi()->getLocationsArray()
+                )
+            )->getElementBy('getType', 'select')
+                ->setName($search->getSearchPrefix() . 'location')
+                ->getParent()
+        );
+        
+        // Add Cottage Name
+        $fs->addChild(
+            \aw\formfields\forms\StaticForm::getNewLabelAndTextField(
+                'Cottage Name'
+            )->getElementBy('getType', 'text')
+                ->setName($search->getSearchPrefix() . 'name')
+                ->getParent()
+        );
+        
+        // Add fieldset to form
+        $form->addChild($fs);
+        
+        // Add submit button
+        $form->addChild(
+            new \aw\formfields\fields\SubmitButton(
+                array(
+                    'value' => 'Search'
+                )
+            )
+        );
+            
+        // Register hook for the form preprocessing
+        do_action('wpTabsApiWidgetFormModify', $form);
         
         echo $form->mapValues();
     }

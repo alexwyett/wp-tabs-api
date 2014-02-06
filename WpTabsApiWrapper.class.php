@@ -580,6 +580,14 @@ class WpTabsApiWrapper
     {
         // Set the customer main fields
         foreach ($array as $key => $val) {
+            
+            // Some basic transforms needed for the new forms
+            switch($key) {
+            case 'initial':
+                $key = 'firstname';
+                break;
+            }
+            
             $func = 'set' . ucfirst($key);
             if ($val != '') {
                 // Set the email optin boolean
