@@ -889,18 +889,22 @@ class WpTabsApi
     public function preProcessCottage($post)
     {        
         global $property;
-        $property = $this->getTabsApi()->getPropertyFromId($post->post_excerpt);
-        if ($property) {
-            
-            // Register hook for the cottage preprocessing
-            do_action('wpTabsApiCottagePreprocess', $property);
-            
-            return array(
-                'property' => $property
-            );
-            
-        } else {
-            $this->do404('No property found');
+        try {
+            $property = $this->getTabsApi()->getPropertyFromId($post->post_excerpt);
+            if ($property) {
+                
+                // Register hook for the cottage preprocessing
+                do_action('wpTabsApiCottagePreprocess', $property);
+                
+                return array(
+                    'property' => $property
+                );
+                
+            } else {
+                $this->do404('No property found');
+            }
+        } catch (\tabs\api\client\ApiException $e) {
+            $this->do404($e->getMessage());
         }
     }
     

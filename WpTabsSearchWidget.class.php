@@ -219,7 +219,7 @@ class WpTabsSearchWidget extends WP_Widget
                     '25 nights' => 25,
                     '26 nights' => 26,
                     '27 nights' => 27,
-                    '28 nights'
+                    '28 nights' => 28
                 )
             )->getElementBy('getType', 'select')
                 ->setName($search->getSearchPrefix() . 'nights')

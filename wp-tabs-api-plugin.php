@@ -91,7 +91,7 @@
  *  - This action enables the brochure form to be modified prior to it being
  *    rendered.
  * 
- *      function yourBrochureModifyFunction(&$ownerPack) {}
+ *      function yourBrochureModifyFunction(&$brochureForm) {}
  * 
  * 10: add_action('wpTabsApiOwnerpackPreprocess', 'yourOwnerpackModifyFunction');
  * 
