@@ -266,7 +266,7 @@ if (!function_exists('getFlashStatusMessage')) {
         
         if ($flash_status != "" && $flash_message != "") {
             return sprintf(
-                '<div id="message" class="updated fade %s"><p>%s</p></div>',
+                '<div id="message" class="alert alert-%s"><p>%s</p></div>',
                 $flash_status,
                 $flash_message
             );

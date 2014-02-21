@@ -1078,8 +1078,7 @@ class WpTabsApi
                 );
 
                 // Create new booking form object
-                $bookingForm = new \AW\Forms\BookingForm(
-                    $booking,
+                $bookingForm = \aw\formfields\forms\BookingForm::factory(
                     array(
                         'method' => 'post',
                     ),
@@ -1091,15 +1090,21 @@ class WpTabsApi
                     array_merge(
                         array('Select' => ''),
                         $this->getTabsApi()->getSourceCodesInverse()
-                    )
+                    ),
+                    array(), // TODO: Extras
+                    $booking->getAdults(),
+                    $booking->getChildren(),
+                    $booking->getInfants()
                 );
 
                 // Register hook for the cottage booking preprocessing
                 do_action(
                     'wpTabsApiBookingPreprocess',
-                    $booking,
-                    $property,
-                    $bookingForm
+                    array(
+                        'booking' => $booking,
+                        'property' => $property,
+                        'bookingForm' => $bookingForm
+                    )
                 );
 
                 // Look for validation
@@ -1121,6 +1126,7 @@ class WpTabsApi
                                         $i,
                                         'adult'
                                     );
+                                    
                                 if ($member) {
                                     $booking->setPartyMember($member);
                                 }
@@ -1193,7 +1199,7 @@ class WpTabsApi
                             // an exception
                         } catch(Exception $e) {
                             // Redirect to booking page with flash message
-                            saveFlashMessage('error', $e->getMessage());
+                            saveFlashMessage('warning', $e->getMessage());
                             redirect(
                                 WpTabsApi__getEndPointPermalink(
                                     $post->ID, 

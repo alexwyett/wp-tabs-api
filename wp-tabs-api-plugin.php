@@ -39,10 +39,10 @@
  * 3: add_action('wpTabsApiBookingPreprocess', 'yourBookingFunctionName');
  * 
  *  - This hook allows you to capture the booking object before the page renders.
- *    It has three arguments.  The booking, property and bookingForm objects.
- *    I.e.
+ *    It has three objects in the array.  The $booking, $property and 
+ *    $bookingForm objects. I.e.
  * 
- *      function yourBookingFunctionName($booking, $property, $bookingForm) {}
+ *      function yourBookingFunctionName($array) {}
  * 
  * 4: add_action('wpTabsApiBookingPostProcess', 'yourBookingFunctionName');
  * 
@@ -113,12 +113,12 @@ require 'helpers/common.php';
 /**
  * Include formFields bootstrap loader
  */
-require_once 'libraries/aw-form-fields/aw/formfields/autoload.php';
+require_once 'libraries/aw-form-fields/autoload.php';
 
 /**
  * Include the tabs api 
  */
-require_once 'libraries/tabs-api-client/tabs/autoload.php';
+require_once 'libraries/tabs-api-client/autoload.php';
 
 /**
  * Require Tabs Api Class 

@@ -466,15 +466,15 @@ class WpTabsApiWrapper
         $number = 1, 
         $type = 'adult'
     ) {
-        if (isset($array[$type . 'firstname' . $number])
-            && isset($array[$type . 'surname' . $number])
-            && isset($array[$type . 'age' . $number])
+        if (isset($array[$type . '_' . $number . '_firstname'])
+            && isset($array[$type . '_' . $number . '_surname'])
+            && isset($array[$type . '_' . $number . '_age'])
         ) {
             $partyMember = \tabs\api\booking\PartyDetail::createPartyMember(
-                $array[$type . 'firstname' . $number], 
-                $array[$type . 'surname' . $number], 
-                $array[$type . 'age' . $number], 
-                $array[$type . 'title' . $number], 
+                $array[$type . '_' . $number . '_firstname'], 
+                $array[$type . '_' . $number . '_surname'], 
+                $array[$type . '_' . $number . '_age'], 
+                $array[$type . '_' . $number . '_title'], 
                 $type
             );
         
@@ -584,7 +584,16 @@ class WpTabsApiWrapper
             // Some basic transforms needed for the new forms
             switch($key) {
             case 'initial':
-                $key = 'firstname';
+                $key = 'firstName';
+                break;
+            case 'telephone':
+                $key = 'daytimePhone';
+                break;
+            case 'mobile':
+                $key = 'mobilePhone';
+                break;
+            case 'emailoptin':
+                $key = 'emailOptIn';
                 break;
             }
             
