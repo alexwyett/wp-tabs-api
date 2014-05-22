@@ -189,7 +189,7 @@ class WpTabsApiWrapper
      */
     public function getCountries()
     {
-        return  \tabs\api\utility\Utility::getCountriesBasic();
+        return \tabs\api\utility\Utility::getCountriesBasic();
     }
     
     /**
@@ -210,6 +210,16 @@ class WpTabsApiWrapper
     public function getSourceCodes()
     {
         return \tabs\api\utility\Utility::getSourceCodesBasic();
+    }
+    
+    /**
+     * Get tabs sourcecode objects
+     * 
+     * @return array 
+     */
+    public function getSourceCodesFull()
+    {
+        return \tabs\api\utility\Utility::getSourceCodes();
     }
     
     /**

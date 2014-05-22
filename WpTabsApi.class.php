@@ -764,7 +764,7 @@ class WpTabsApi
             ),
             array_merge(
                 array('Select' => ''),
-                $this->getTabsApi()->getSourceCodesInverse()
+                $this->_getSourcecodesOptgroup()
             )
         );
             
@@ -1860,5 +1860,34 @@ class WpTabsApi
             'width' => $width,
             'height' => $height
         );
+    }
+    
+    /**
+     * Return an array of \aw\formfields\fields\Optgroup objects populated
+     * with source code data.
+     *
+     * @return array
+     */
+    private function _getSourcecodesOptgroup()
+    {
+        $sourceOpts = array();
+        $sourceCats = array();
+        $sources = $this->getTabsApi()->getSourceCodesFull();
+        foreach ($sources as $source) {
+            if ($source->getCategory() == '') {
+                $source->setCategory('Other');
+            }
+            $sourceCats[$source->getCategory()][] = $source;
+        }
+        
+        foreach ($sourceCats as $cat => $sources) {
+            $options = array();
+            foreach ($sources as $source) {
+                $options[$source->getDescription()] = $source->getCode();
+            }
+            $sourceOpts[] = \aw\formfields\fields\Optgroup::factory($cat, $options);
+        }
+        
+        return $sourceOpts;
     }
 }
