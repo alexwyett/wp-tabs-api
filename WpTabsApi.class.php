@@ -832,7 +832,7 @@ class WpTabsApi
             ),
             array_merge(
                 array('Select' => ''),
-                $this->getTabsApi()->getSourceCodesInverse()
+                $this->_getSourcecodesOptgroup()
             )
         );
             
@@ -1089,7 +1089,7 @@ class WpTabsApi
                     ),
                     array_merge(
                         array('Select' => ''),
-                        $this->getTabsApi()->getSourceCodesInverse()
+                        $this->_getSourcecodesOptgroup()
                     ),
                     array(), // TODO: Extras
                     $booking->getAdults(),
