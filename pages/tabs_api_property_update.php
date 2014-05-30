@@ -69,7 +69,7 @@ if ($wpTabsApi->getCottagePostType()) {
             WPTABSAPIPLUGIN_COTTAGE_POST_TYPE_KEY,
             getInputField(
                 WPTABSAPIPLUGIN_COTTAGE_POST_TYPE_KEY, 
-                get_option(WPTABSAPIPLUGIN_COTTAGE_POST_TYPE_KEY), 
+                get_option(WPTABSAPIPLUGIN_COTTAGE_POST_TYPE_KEY, 'cottage'), 
                 'text',
                 'maxlength="100" size="50"'
             )
