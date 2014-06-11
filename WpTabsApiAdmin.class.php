@@ -202,7 +202,7 @@ class WPTabsApiAdmin
             add_menu_page(
                 WPTABSAPIPLUGINNAME . ' - Home',
                 WPTABSAPIPLUGINNAME,
-                $min_capability, 
+                $min_capability,
                 $parent,
                 array($instance, 'adminPage')
             );

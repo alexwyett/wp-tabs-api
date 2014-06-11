@@ -27,6 +27,10 @@ if (count($_POST) > 0) {
         }
     }
     
+    if (checkArrayKeyExistsAndHasAValue($_POST, "flush", "1")) {
+        $wpTabsApi->flushCottageIndexes();
+    }
+    
     // Check setting has been set and update cottage index
     $wpTabsApi->updateCottageIndexes();
 }
@@ -72,6 +76,25 @@ if ($wpTabsApi->getCottagePostType()) {
                 get_option(WPTABSAPIPLUGIN_COTTAGE_POST_TYPE_KEY, 'cottage'), 
                 'text',
                 'maxlength="100" size="50"'
+            )
+        );
+        echo sprintf(
+            '<tr>
+                <th>
+                    <label for="%s">Flush cottage indexes?: </label>
+                </th>
+                <td>
+                    %s
+                    <div class="field-description">
+                        Choosing this option will return all of the cottages first before re-indexing
+                    </div>
+                </td>
+            </tr>',
+            'flush',
+            getInputField(
+                'flush', 
+                '', 
+                'checkbox'
             )
         );
     ?>

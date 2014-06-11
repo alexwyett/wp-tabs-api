@@ -490,6 +490,16 @@ class WpTabsApi
     }
     
     /**
+     * Remove all cottage post types from wordpress
+     * 
+     * @return void
+     */
+    public function flushCottageIndexes()
+    {
+        $this->_removeAllCottageIndexes();
+    }
+    
+    /**
      * Get all of the cottage indexes in wordpress
      * 
      * @return integer
@@ -644,6 +654,7 @@ class WpTabsApi
         
         // Filter out invalid search filters
         $filters = $this->getTabsApi()->getSearchFilters();
+        
         $searchParams = array_intersect_key(
             array_filter($searchParams), 
             array_flip($filters)

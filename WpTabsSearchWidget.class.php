@@ -147,17 +147,12 @@ class WpTabsSearchWidget extends WP_Widget
         }
         
         // New search form
-        $form = new \aw\formfields\forms\Form(
+        $form = $this->getTabsApi()->getQuicksearchForm(
             array(
                 'method' => 'post', 
                 'action' => admin_url('admin-ajax.php')
             ),
             $search->getInitialParams()
-        );
-        
-        // Fieldset
-        $fs = \aw\formfields\fields\Fieldset::factory(
-            'Find a cottage'
         );
         
         // Set uri hidden field
@@ -175,127 +170,6 @@ class WpTabsSearchWidget extends WP_Widget
                 array('value' => 'cottagesearch')
             )
         );
-        
-        // Create new fromdate
-        $fs->addChild(
-            \aw\formfields\forms\StaticForm::getNewLabelAndTextField(
-                'From Date'
-            )->getElementBy('getType', 'text')
-                ->setName($search->getSearchPrefix() . 'fromDate')
-                ->addClass('dtp')
-                ->getParent()
-        );
-        
-        // Create new nights select box
-        $fs->addChild(
-            \aw\formfields\forms\StaticForm::getNewLabelAndSelect(
-                'Nights',
-                array(
-                    'Any' => '',
-                    '2 nights' => 2,
-                    '3 nights' => 3,
-                    '4 nights' => 4,
-                    '5 nights' => 5,
-                    '6 nights' => 6,
-                    '7 nights' => 7,
-                    '8 nights' => 8,
-                    '9 nights' => 9,
-                    '10 nights' => 10,
-                    '11 nights' => 11,
-                    '12 nights' => 12,
-                    '13 nights' => 13,
-                    '14 nights' => 14,
-                    '14 nights' => 14,
-                    '15 nights' => 15,
-                    '16 nights' => 16,
-                    '17 nights' => 17,
-                    '18 nights' => 18,
-                    '19 nights' => 19,
-                    '20 nights' => 20,
-                    '21 nights' => 21,
-                    '22 nights' => 22,
-                    '23 nights' => 23,
-                    '24 nights' => 24,
-                    '25 nights' => 25,
-                    '26 nights' => 26,
-                    '27 nights' => 27,
-                    '28 nights' => 28
-                )
-            )->getElementBy('getType', 'select')
-                ->setName($search->getSearchPrefix() . 'nights')
-                ->getParent()
-        );
-        
-        // Create new sleeps select box
-        $fs->addChild(
-            \aw\formfields\forms\StaticForm::getNewLabelAndSelect(
-                'Sleeping',
-                array(
-                    'Any' => '',
-                    2  => 2,
-                    3  => 3,
-                    4  => 4,
-                    5  => 5,
-                    6  => 6,
-                    7  => 7,
-                    8  => 8,
-                    9  => 9,
-                    "10+" => ">10"
-                )
-            )->getElementBy('getType', 'select')
-                ->setName($search->getSearchPrefix() . 'accommodates')
-                ->getParent()
-        );
-        
-        // Create new area select box
-        $fs->addChild(
-            \aw\formfields\forms\StaticForm::getNewLabelAndSelect(
-                'Area',
-                array_merge(
-                    array('Any Area' => ''),
-                    $this->getTabsApi()->getAreasInverse()
-                )
-            )->getElementBy('getType', 'select')
-                ->setName($search->getSearchPrefix() . 'area')
-                ->getParent()
-        );
-        
-        // Create new area location box
-        $fs->addChild(
-            \aw\formfields\forms\StaticForm::getNewLabelAndSelect(
-                'Location',
-                array_merge(
-                    array('Any Location' => ''),
-                    $this->getTabsApi()->getLocationsArray()
-                )
-            )->getElementBy('getType', 'select')
-                ->setName($search->getSearchPrefix() . 'location')
-                ->getParent()
-        );
-        
-        // Add Cottage Name
-        $fs->addChild(
-            \aw\formfields\forms\StaticForm::getNewLabelAndTextField(
-                'Cottage Name'
-            )->getElementBy('getType', 'text')
-                ->setName($search->getSearchPrefix() . 'name')
-                ->getParent()
-        );
-        
-        // Add fieldset to form
-        $form->addChild($fs);
-        
-        // Add submit button
-        $form->addChild(
-            new \aw\formfields\fields\SubmitButton(
-                array(
-                    'value' => 'Search'
-                )
-            )
-        );
-            
-        // Register hook for the form preprocessing
-        do_action('wpTabsApiWidgetFormModify', $form);
         
         echo $form->mapValues();
     }

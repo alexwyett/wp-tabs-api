@@ -14,6 +14,11 @@
  */
 
 /**
+ * Require the quicksearch form object
+ */
+require_once 'libraries/Quicksearch.php';
+
+/**
  * WP Tabs Api Wrapper Class.  Conditionally includes tabs api client files
  * and returns the correct objects. 
  *
@@ -233,116 +238,6 @@ class WpTabsApiWrapper
     }
     
     /**
-     * Get search settings
-     * 
-     * @return array
-     */
-    public function getSearchSettings()
-    {
-        return array(
-            $this->getSearchPrefix() . 'name' => array(
-                'type'       => 'text',
-                'values' => '',
-                'attributes' => array(
-                    'id' => 'schName'
-                )
-            ),
-            $this->getSearchPrefix() . 'area' => array(
-                'type'       => 'select',
-                'values' => array_merge(
-                    array('' => 'Please Select'),
-                    $this->getAreas()
-                ),
-                'attributes' => array(
-                    'id' => 'schArea'
-                )
-            ),
-            $this->getSearchPrefix() . 'location' => array(
-                'type'       => 'select',
-                'values' => array_merge(
-                    array('' => 'Please Select'),
-                    $this->getLocations()
-                ),
-                'attributes' => array(
-                    'id' => 'schArea'
-                )
-            ),
-            $this->getSearchPrefix() . 'fromDate' => array(
-                'type'       => 'dateSelect',
-                'values'     => 'd-m-Y',
-                'attributes' => array(
-                    'id' => 'schFromDate',
-                    'class' => 'dtpDate'
-                )
-            ),
-            $this->getSearchPrefix() . 'accommodates' => array(
-                'type'       => 'select',
-                'values'     => array(
-                    '' => 'Any',
-                    2  => 2,
-                    3  => 3,
-                    4  => 4,
-                    5  => 5,
-                    6  => 6,
-                    7  => 7,
-                    8  => 8,
-                    9  => 9,
-                    ">10" => "10+"
-                ),
-                'attributes' => array(
-                    'id' => 'schAccommodates'
-                )
-            ),
-            $this->getSearchPrefix() . 'nights' => array(
-                'type'       => 'select',
-                'values'     => array(
-                    '' => 'Any',
-                    3  => '3 nights',
-                    7  => '7 nights',
-                    14  => '14 nights',
-                    21  => '21 nights',
-                ),
-                'attributes' => array(
-                    'id' => 'schNights'
-                )
-            ),
-            $this->getSearchPrefix() . 'pets' => array(
-                'type'       => 'check',
-                'values'     => 'true',
-                'attributes' => array(
-                    'id' => 'schPets'
-                )
-            ),
-            $this->getSearchPrefix() . 'orderBy' => array(
-                'type'       => 'select',
-                'values'     => array(
-                    ''            => 'Any',
-                    'price_asc'   => 'Price low to high',
-                    'price_desc'  => 'Price high to low',
-                    'accom_asc'  => 'Sleeps low to high',
-                    'accom_desc'  => 'Sleeps high to low',
-                    'bedrooms_asc'  => 'Bedrooms low to high',
-                    'bedrooms_desc'  => 'Bedrooms high to low',
-                ),
-                'attributes' => array(
-                    'id' => 'schOrderby'
-                )
-            ),
-            $this->getSearchPrefix() . 'pageSize' => array(
-                'type'       => 'select',
-                'values'     => array(
-                    10 => 10,
-                    20 => 20,
-                    50 => 50
-                ),
-                'attributes' => array(
-                    'id' => 'schPageSize'
-                )
-            )
-        );
-    }
-    
-    /**
      * Return a new enquiry object
      * 
      * @param string    $propertyId The property 'propref_brandcode'
@@ -459,6 +354,12 @@ class WpTabsApiWrapper
         foreach ($filters as $filter) {
             $filters[] = WPTABSAPIPLUGINSEARCHPREFIX . $filter;
         }
+        
+        // Add in defaults, page, pageSize, orderBy
+        $filters[] = WPTABSAPIPLUGINSEARCHPREFIX . 'page';
+        $filters[] = WPTABSAPIPLUGINSEARCHPREFIX . 'pageSize';
+        $filters[] = WPTABSAPIPLUGINSEARCHPREFIX . 'orderBy';
+        
         return $filters;
     }
     
@@ -623,5 +524,62 @@ class WpTabsApiWrapper
                 }
             }
         }
+    }
+    
+    /**
+     * Return a quick search form
+     * 
+     * @param array $attributes Form attributes
+     * @param array $formValues Form Values
+     *
+     * @return \aw\formfields\form\Quicksearch
+     */
+    public function getQuicksearchForm(
+        $attributes = array(),
+        $formValues = array()
+    ) {
+        $search = $this->getSearchHelper();
+
+        // Set search prefix
+        $search->setSearchPrefix(
+            WPTABSAPIPLUGINSEARCHPREFIX
+        );
+        
+        // New search form
+        $form = new \aw\formfields\forms\Quicksearch($attributes, $formValues);
+        
+        // Set element prefix
+        $form->setPrefix(WPTABSAPIPLUGINSEARCHPREFIX);
+        
+        // Create new area select box
+        $form->setAreaSelect(
+            $form->createBasicSelect(
+                'Area', 
+                array_merge(
+                    array('Any Area' => ''),
+                    $this->getAreasInverse()
+                ),
+                $search->getSearchPrefix() . 'area', 
+                'area'
+            )
+        );
+        
+        // Create new area location box
+        $form->setLocationSelect(
+            $form->createBasicSelect(
+                'Location', 
+                array_merge(
+                    array('Any Location' => ''),
+                    $this->getLocationsArray()
+                ),
+                $search->getSearchPrefix() . 'location', 
+                'location'
+            )
+        );
+            
+        // Register hook for the form preprocessing
+        do_action('wpTabsApiWidgetFormModify', $form);
+        
+        return $form->build();
     }
 }
