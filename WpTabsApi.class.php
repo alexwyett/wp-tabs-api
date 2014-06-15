@@ -766,9 +766,10 @@ class WpTabsApi
         
         $brochureForm = \aw\formfields\forms\BrochureForm::factory(
             array(
-                'method' => 'post'
+                'method' => 'post',
+                'class' => 'wp-tabs-form'
             ), 
-            $_POST,
+            filter_input_array(INPUT_POST),
             array_merge(
                 array('Select' => ''),
                 $this->getTabsApi()->getCountriesInverse()
@@ -782,13 +783,13 @@ class WpTabsApi
         // Register hook for the cottage preprocessing
         do_action('wpTabsApiBrochurePreprocess', $brochureForm);
         
-        if (count($_POST) > 0) {
+        if (count($brochureForm->getFormValues()) > 0) {
             $brochureForm->validate();
             if ($brochureForm->isValid()) {
                 try {
                     // Create customer
                     $customer = $this->getTabsApi()->createNewCustomerFromPostArray(
-                        $_POST
+                        filter_input_array(INPUT_POST)
                     );
                     $customer->setBrandCode(get_option('tabs_api_brandcode'));
                     $customer->requestBrochure();
@@ -834,9 +835,10 @@ class WpTabsApi
         
         $ownerForm = \aw\formfields\forms\OwnerpackForm::factory(
             array(
-                'method' => 'post'
+                'method' => 'post',
+                'class' => 'wp-tabs-form'
             ), 
-            $_POST,
+            filter_input_array(INPUT_POST),
             array_merge(
                 array('Select' => ''),
                 $this->getTabsApi()->getCountriesInverse()
@@ -850,13 +852,13 @@ class WpTabsApi
         // Register hook for the cottage preprocessing
         do_action('wpTabsApiOwnerpackPreprocess', $ownerForm);
         
-        if (count($_POST) > 0) {
+        if (count($ownerForm->getFormValues()) > 0) {
             $ownerForm->validate();
             if ($ownerForm->isValid()) {
                 try {
                     // Create owner
                     $owner = $this->getTabsApi()->createNewOwnerFromPostArray(
-                        $_POST
+                        filter_input_array(INPUT_POST)
                     );
                     $owner->setEnquiryBrandCode(get_option('tabs_api_brandcode'));
                     
@@ -864,9 +866,9 @@ class WpTabsApi
                     do_action('wpTabsApiOwnerPackPostProcess', $owner);
                     
                     $owner->requestOwnerPack(
-                        assignArrayValue($_POST, 'where', ''),
-                        assignArrayValue($_POST, 'about', ''), 
-                        (isset($_POST['currentlyLetting']) ? ($_POST['currentlyLetting'] == '1') : false)
+                        (filter_input(INPUT_POST, 'where') ? filter_input(INPUT_POST, 'where') : ''),
+                        (filter_input(INPUT_POST, 'about') ? filter_input(INPUT_POST, 'about') : ''),
+                        (filter_input(INPUT_POST, 'currentlyLetting') ? (filter_input(INPUT_POST, 'currentlyLetting') == '1') : false)
                     );
                 
                     if ($target == '') {
@@ -1092,8 +1094,9 @@ class WpTabsApi
                 $bookingForm = \aw\formfields\forms\BookingForm::factory(
                     array(
                         'method' => 'post',
+                        'class' => 'wp-tabs-form'
                     ),
-                    $_POST,
+                    filter_input_array(INPUT_POST),
                     array_merge(
                         array('Select' => ''),
                         $this->getTabsApi()->getCountriesInverse()
@@ -1125,7 +1128,9 @@ class WpTabsApi
                         try {
                             // Create customer and save to booking
                             $customer = $this->getTabsApi()
-                                ->createNewCustomerFromPostArray($_POST);
+                                ->createNewCustomerFromPostArray(
+                                    filter_input_array(INPUT_POST)
+                                );
                             $booking->setCustomer($customer);
 
                             // Create new party members (but clear first)
@@ -1133,7 +1138,7 @@ class WpTabsApi
                             for ($i = 1; $i <= $booking->getAdults(); $i++) {
                                 $member = $this->getTabsApi()
                                     ->createNewPartyMemberFromPostArray(
-                                        $_POST,
+                                        filter_input_array(INPUT_POST),
                                         $i,
                                         'adult'
                                     );
@@ -1145,7 +1150,7 @@ class WpTabsApi
                             for ($i = 1; $i <= $booking->getChildren(); $i++) {
                                 $member = $this->getTabsApi()
                                     ->createNewPartyMemberFromPostArray(
-                                        $_POST,
+                                        filter_input_array(INPUT_POST),
                                         $i,
                                         'child'
                                     );
@@ -1153,10 +1158,10 @@ class WpTabsApi
                                     $booking->setPartyMember($member);
                                 }
                             }
-                            for ($i = 1; $i <= $booking->getChildren(); $i++) {
+                            for ($i = 1; $i <= $booking->getInfants(); $i++) {
                                 $member = $this->getTabsApi()
                                     ->createNewPartyMemberFromPostArray(
-                                        $_POST,
+                                        filter_input_array(INPUT_POST),
                                         $i,
                                         'infant'
                                     );
@@ -1168,8 +1173,8 @@ class WpTabsApi
                             // Save party details
                             $booking->setPartyDetails();
 
-                            if (array_key_exists('payment', $_POST) 
-                                && $_POST['payment'] == '2'
+                            if (filter_input(INPUT_POST, 'payment')
+                                && filter_input(INPUT_POST, 'payment') == '2'
                             ) {
                                 redirect(
                                     WpTabsApi__getEndPointPermalink(

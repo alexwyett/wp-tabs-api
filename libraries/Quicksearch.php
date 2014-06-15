@@ -207,7 +207,7 @@ class Quicksearch extends \aw\formfields\forms\StaticForm
                         $this->getNights(), 
                         $this->getPrefix() . 'nights', 
                         'nights'
-                    )->getChild(0)->setValue(7)
+                    )->getChild(0)->setValue(7)->getParent()
                 );
         }
         

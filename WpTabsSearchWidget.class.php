@@ -150,7 +150,9 @@ class WpTabsSearchWidget extends WP_Widget
         $form = $this->getTabsApi()->getQuicksearchForm(
             array(
                 'method' => 'post', 
-                'action' => admin_url('admin-ajax.php')
+                'action' => admin_url('admin-ajax.php'),
+                'id' => 'wp-tabs-quicksearch-widget',
+                'class' => 'wp-tabs-form'
             ),
             $search->getInitialParams()
         );

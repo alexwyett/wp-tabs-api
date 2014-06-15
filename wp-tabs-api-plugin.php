@@ -155,8 +155,9 @@ if (!function_exists('WpTabsApi__getSearchPageContent')) {
                     $content .= $search->getPaginationLinks();
                     foreach ($search->getProperties() as $property) {
                         ob_start();
-                        if (is_file(get_template_directory() . DS . 'single-cottage-row.php')) {
-                            include get_template_directory() . DS . 'single-cottage-row.php';
+                        // Use get_stylesheet_directory() in case childtheme is being used.
+                        if (is_file(get_stylesheet_directory() . DS . 'single-cottage-row.php')) {
+                            include get_stylesheet_directory() . DS . 'single-cottage-row.php';
                         } else {
                             include 'templates/single-cottage-row.php';
                         }
@@ -203,8 +204,9 @@ if (!function_exists('WpTabsApi__getPropertySummary')) {
             $property = $wpTabsApi->getTabsApi()->getPropertyFromId($propRef);
             if ($property) {
                 ob_start();
-                if (is_file(get_template_directory() . DS . 'single-cottage-summary.php')) {
-                    include get_template_directory() . DS . 'single-cottage-summary.php';
+                // Use get_stylesheet_directory() in case childtheme is being used.
+                if (is_file(get_stylesheet_directory() . DS . 'single-cottage-summary.php')) {
+                    include get_stylesheet_directory() . DS . 'single-cottage-summary.php';
                 } else {
                     include 'templates/single-cottage-summary.php';
                 }
